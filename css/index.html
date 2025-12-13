@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List Dark Mode</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Todo List</h1>
+
+        <div class="input-area">
+            <input type="text" id="taskInput" placeholder="Add a todo...">
+
+            <input type="date" id="dateInput">
+
+            <button id="addButton" class="add-button">+</button>
+        </div>
+
+        <div class="controls">
+            <select id="filterSelect" class="filter-button">
+                <option value="all">FILTER</option>
+                <option value="active">Active</option>
+                <option value="completed">Completed</option>
+            </select>
+
+            <button id="deleteAllButton" class="delete-all-button">DELETE ALL</button>
+        </div>
+
+        <table class="todo-table">
+            <thead>
+                <tr>
+                    <th>TASK</th>
+                    <th>DUE DATE</th>
+                    <th>STATUS</th>
+                    <th>ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody id="todoList">
+            </tbody>
+        </table>
+
+        <p id="noTaskMessage" class="no-task-message" style="display: block;">No task found</p>
+
+    </div>
+
+    <script src="/JS/script.js"></script>
+</body>
+
+</html>
