@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Pastikan koneksi elemen
+    
     const taskInput = document.getElementById('taskInput');
     const dateInput = document.getElementById('dateInput');
     const addButton = document.getElementById('addButton');
@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterSelect = document.getElementById('filterSelect');
     const noTaskMessage = document.getElementById('noTaskMessage');
 
-    // LAKUKAN PENGUJIAN KONEKSI SAAT STARTUP
+    
     if (!taskInput || !addButton || !todoList) {
         console.error("CRITICAL ERROR: Salah satu elemen HTML utama (Input Tugas, Tombol Add, atau Todo List) TIDAK DITEMUKAN. Periksa ID di index.html.");
     }
@@ -30,13 +30,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function addTodo() {
-        // --- BLOK PENGAMANAN BARU DI SINI ---
+        
         if (!taskInput || !dateInput || !todoList) {
             console.error("ERROR: Elemen input hilang saat mencoba menambahkan tugas.");
             alert("Gagal menambahkan tugas. Periksa Console untuk detailnya (Kemungkinan ID HTML salah).");
-            return; // Hentikan eksekusi jika elemen hilang
+            return; 
         }
-        // --- AKHIR BLOK PENGAMANAN BARU ---
+        
 
         const taskText = taskInput.value.trim();
         const dueDate = dateInput.value;
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("SUCCESS: Tugas berhasil ditambahkan dan fungsi render dipanggil.");
     }
 
-    // ... (fungsi toggleComplete, deleteTodo, deleteAllTodos, renderTodos tidak perlu diubah)
+    
 
     function toggleComplete(id) {
         const todoIndex = todos.findIndex(todo => todo.id === id);
@@ -88,12 +88,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderTodos() {
-        // ... (kode fungsi renderTodos yang sangat panjang yang Anda kirimkan sebelumnya)
-        // ... (fungsi ini tetap sama, saya tidak menampilkannya di sini untuk keringkasan)
+        
+        
 
-        // *CATATAN: Pastikan Anda menyalin kode renderTodos() yang LENGKAP dari versi yang Anda miliki*
+        
 
-        // Hapus semua baris yang ada
+        
         todoList.innerHTML = '';
         const filterStatus = filterSelect.value;
         let filteredTodos = todos;
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Tambahkan event listener untuk tombol di baris baru
+        
         document.querySelectorAll('.toggle-btn').forEach(button => {
             button.addEventListener('click', (e) => {
                 toggleComplete(parseInt(e.target.dataset.id));
