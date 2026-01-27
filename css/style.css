@@ -1,15 +1,19 @@
 :root {
-    --background-dark: #1A1A2E;
-    --card-dark: #2C2F33;
-    --text-light: #F5F5F5;
-    --input-dark: #36393F;
-    --accent-color: #7289DA;
-    --delete-color: #E74C3C;
-    --hover-dark: #3E4249;
+    --background-light: rgba(255, 255, 255, 0.85);
+    --card-light: #FCF8F2;
+    --text-dark: #4A3F35;
+    --input-bg: #FFFFFF;
+    --accent-color: #89A8E0;
+    --delete-color: #F28B82;
+    --hover-light: #F0E6D6;
 }
 
 body {
-    background-color: var(--background-dark);
+    background-image: url('https://i.pinimg.com/1200x/fe/c0/8a/fec08a65512244d2cb23e7afc435eec4.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     color: var(--text-light);
     font-family: sans-serif;
     display: flex;
@@ -20,12 +24,14 @@ body {
 }
 
 .container {
-    background-color: var(--card-dark);
+    background-color: var(--background-light);
+    backdrop-filter: blur(5px);
     padding: 30px;
-    border-radius: 15px;
+    border-radius: 25px;
     width: 90%;
-    max-width: 800px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 h1 {
@@ -39,7 +45,6 @@ h1 {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
-    
     position: relative;
     z-index: 10;
 }
@@ -73,7 +78,6 @@ h1 {
     font-size: 24px;
     transition: background-color 0.2s;
     line-height: 1.2;
-    
     position: relative;
     z-index: 11;
 }
@@ -129,10 +133,10 @@ h1 {
 }
 
 .todo-table th {
-    background-color: #3e4249;
+    background-color: #EFE6D5;
     padding: 12px;
     font-weight: bold;
-    color: var(--text-light);
+    color: #6D5D4E;
     text-transform: uppercase;
     font-size: 0.85em;
     border-bottom: 2px solid var(--accent-color);
@@ -148,7 +152,7 @@ h1 {
 }
 
 #todoList tr:hover {
-    background-color: var(--hover-dark);
+    background-color: rgba(137, 168, 224, 0.1);
 }
 
 .completed-text {
@@ -180,9 +184,10 @@ h1 {
 
 .no-task-message {
     text-align: center;
-    color: #999;
+    color: #888;
     padding: 20px;
-    border: 1px dashed #444;
+    border: 1px dashed #C2B7A3;
     border-radius: 8px;
     margin-top: 15px;
+    background-color: rgba(255, 255, 255, 0.5);
 }
