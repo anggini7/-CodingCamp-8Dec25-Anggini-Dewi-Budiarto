@@ -1,24 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     const taskInput = document.getElementById('taskInput');
     const dateInput = document.getElementById('dateInput');
     const addButton = document.getElementById('addButton');
     const todoList = document.getElementById('todoList');
-    const deleteAllButton = document.getElementById('deleteAllButton');
     const filterSelect = document.getElementById('filterSelect');
     const noTaskMessage = document.getElementById('noTaskMessage');
-
-    
-    if (!taskInput || !addButton || !todoList) {
-        console.error("CRITICAL ERROR: Salah satu elemen HTML utama (Input Tugas, Tombol Add, atau Todo List) TIDAK DITEMUKAN. Periksa ID di index.html.");
-    }
+    const deleteAllButton = document.getElementById('deleteAllButton');
 
     let todos = loadTodos();
     renderTodos();
 
+
     addButton.addEventListener('click', addTodo);
-    deleteAllButton.addEventListener('click', deleteAllTodos);
     filterSelect.addEventListener('change', renderTodos);
+    if (deleteAllButton) {
+        deleteAllButton.addEventListener('click', deleteAllTodos);
+    }
 
     function loadTodos() {
         const storedTodos = localStorage.getItem('todos');
@@ -30,14 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function addTodo() {
-        
-        if (!taskInput || !dateInput || !todoList) {
-            console.error("ERROR: Elemen input hilang saat mencoba menambahkan tugas.");
-            alert("Gagal menambahkan tugas. Periksa Console untuk detailnya (Kemungkinan ID HTML salah).");
-            return; 
-        }
-        
-
         const taskText = taskInput.value.trim();
         const dueDate = dateInput.value;
 
@@ -58,51 +48,51 @@ document.addEventListener('DOMContentLoaded', () => {
         dateInput.value = '';
         saveTodos();
         renderTodos();
-
-        console.log("SUCCESS: Tugas berhasil ditambahkan dan fungsi render dipanggil.");
     }
 
-    
-
     function toggleComplete(id) {
-        const todoIndex = todos.findIndex(todo => todo.id === id);
-        if (todoIndex > -1) {
-            todos[todoIndex].completed = !todos[todoIndex].completed;
+        const index = todos.findIndex(t => t.id === id);
+        if (index > -1) {
+            todos[index].completed = !todos[index].completed;
             saveTodos();
             renderTodos();
         }
     }
 
     function deleteTodo(id) {
-        todos = todos.filter(todo => todo.id !== id);
+        todos = todos.filter(t => t.id !== id);
         saveTodos();
         renderTodos();
     }
 
     function deleteAllTodos() {
-        if (todos.length > 0 && confirm("Apakah Anda yakin ingin menghapus SEMUA tugas?")) {
+        if (todos.length > 0 && confirm("Hapus semua tugas?")) {
             todos = [];
             saveTodos();
             renderTodos();
         }
     }
 
+
     function renderTodos() {
-        
-        
-
-        
-
-        
         todoList.innerHTML = '';
         const filterStatus = filterSelect.value;
+        const hariIni = new Date();
+        hariIni.setHours(0, 0, 0, 0);
+
         let filteredTodos = todos;
 
-        // Logika Filter
+
         if (filterStatus === 'active') {
-            filteredTodos = todos.filter(todo => !todo.completed);
+            filteredTodos = todos.filter(t => !t.completed);
         } else if (filterStatus === 'completed') {
-            filteredTodos = todos.filter(todo => todo.completed);
+            filteredTodos = todos.filter(t => t.completed);
+        } else if (filterStatus === 'expired') {
+            filteredTodos = todos.filter(t => {
+                const tgl = new Date(t.date);
+                tgl.setHours(0, 0, 0, 0);
+                return !t.completed && tgl < hariIni;
+            });
         }
 
         if (filteredTodos.length === 0) {
@@ -111,42 +101,50 @@ document.addEventListener('DOMContentLoaded', () => {
             noTaskMessage.style.display = 'none';
 
             filteredTodos.forEach(todo => {
+                const tglDeadline = new Date(todo.date);
+                tglDeadline.setHours(0, 0, 0, 0);
+
+
+                const isExpired = !todo.completed && tglDeadline < hariIni;
+
                 const row = document.createElement('tr');
-                row.classList.add(todo.completed ? 'completed-task' : 'active-task');
 
-                const statusText = todo.completed ?
-                    `<span class="completed-text">Selesai</span>` :
-                    `<span>Aktif</span>`;
 
-                const taskCell = `<td class="task-title">${todo.text}</td>`;
-                const dateCell = `<td>${todo.date || '-'}</td>`;
-                const statusCell = `<td>${statusText}</td>`;
-                const actionsCell = `
-                     <td>
-                         <button class="action-button toggle-btn" data-id="${todo.id}">
-                             ${todo.completed ? 'Un-do' : 'Selesai'}
-                         </button>
-                         <button class="action-button delete-btn" data-id="${todo.id}">Hapus</button>
-                     </td>
-                 `;
+                let statusHtml = '<span>Aktif</span>';
+                if (todo.completed) {
+                    statusHtml = '<span style="color: green;">Selesai</span>';
+                } else if (isExpired) {
+                    statusHtml = '<span style="color: red; font-weight: bold;">Expired</span>';
+                }
 
-                row.innerHTML = taskCell + dateCell + statusCell + actionsCell;
+
+                let tombolHtml = "";
+                if (isExpired) {
+                    tombolHtml = `<button class="del-btn" data-id="${todo.id}">Hapus</button>`;
+                } else {
+                    tombolHtml = `
+                        <button class="tgl-btn" data-id="${todo.id}">${todo.completed ? 'Un-do' : 'Selesai'}</button>
+                        <button class="del-btn" data-id="${todo.id}">Hapus</button>
+                    `;
+                }
+
+
+                row.innerHTML = `
+                    <td style="${todo.completed ? 'text-decoration: line-through; color: gray;' : ''}">${todo.text}</td>
+                    <td>${todo.date || '-'}</td>
+                    <td>${statusHtml}</td>
+                    <td>${tombolHtml}</td>
+                `;
                 todoList.appendChild(row);
             });
         }
 
-        
-        document.querySelectorAll('.toggle-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
-                toggleComplete(parseInt(e.target.dataset.id));
-            });
-        });
 
-        document.querySelectorAll('.delete-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
-                deleteTodo(parseInt(e.target.dataset.id));
-            });
+        document.querySelectorAll('.tgl-btn').forEach(btn => {
+            btn.onclick = (e) => toggleComplete(parseInt(e.target.dataset.id));
+        });
+        document.querySelectorAll('.del-btn').forEach(btn => {
+            btn.onclick = (e) => deleteTodo(parseInt(e.target.dataset.id));
         });
     }
-
 });
